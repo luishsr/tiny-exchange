@@ -1,4 +1,4 @@
-use std::process;
+use std::{process, str::Bytes};
 use tinyexchange::Command;
 
 // The entry point of a CLI-based exchange
