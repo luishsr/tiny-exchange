@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 /*
  * @dev The dynmenu provides a dynamic list of
  * nested commands (i.e., menu options) that takes a list
@@ -8,29 +10,29 @@
  */
 
 // Holds a list of Menu objects at a component level
-struct DynMenu {
-    menu_list: HashMap,
-    id_counter: u32,
+pub struct DynMenu {
+    pub menu_list: Vec<Menu>,
+    pub id_counter: u32,
 }
 
 // Implements the DynMenu component
-pub impl DynMenu {
-    pub fn initialize() {
-        //TO-DO
+pub fn initialize() -> DynMenu {
+    DynMenu {
+        menu_list: Vec::new(),
+        id_counter: 0,
     }
+}
 
-    // Registers a new menu option
-    pub fn add_menu(&_menu: Menu) -> Result {
-        //TO-DO: check for duplicates
-        menu_list.add(_name, _subMenus);
-    }
+// Registers a new menu option
+pub fn add_menu(&_menu: Menu) {
+
 }
 
 // Represents a menu option
 pub struct Menu {
     id: u32,
     name: String,
-    exec_menus: HashMap,
+    exec_menus: HashMap<SubMenu>,
 }
 
 // Represents an executable menu option
@@ -42,5 +44,5 @@ pub struct SubMenu {
 
 // Defines a trait for executing a function within a menu option
 pub trait ExecutableMenu {
-    pub fn execute() -> Result;
+    pub fn execute(_type: MenuOption, args: Vec<String>) -> Result;
 }

@@ -1,5 +1,19 @@
 use std::error::Error;
 
+// Menu Enum
+enum MenuOption {
+    ACC_CREATE,
+    ACC_BALANCE,
+    ACC_DEPOSIT,
+    ACC_WITHDRAW,
+    MKT_ASSETS,
+    TRD_BUY,
+    TRD_SELL,
+    TRADE,
+    MARKET,
+    ACCOUNT,
+}
+
 // Represents the arguments
 pub struct Command {
     pub domain: String,
