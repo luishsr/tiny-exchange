@@ -1,7 +1,12 @@
 use System::SystemDate;
 use System::SystemTime;
 
-pub enum txType {}
+pub enum txType {
+    BUY,
+    SELL,
+    DEPOSIT,
+    WITHDRAW,
+}
 
 pub struct Transaction {
     id: u32,
