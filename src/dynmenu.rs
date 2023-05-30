@@ -15,6 +15,20 @@ pub struct DynMenu {
     pub id_counter: u32,
 }
 
+// Menu Enum
+enum MenuOption {
+    ACC_CREATE,
+    ACC_BALANCE,
+    ACC_DEPOSIT,
+    ACC_WITHDRAW,
+    MKT_ASSETS,
+    TRD_BUY,
+    TRD_SELL,
+    TRADE,
+    MARKET,
+    ACCOUNT,
+}
+
 // Implements the DynMenu component
 pub fn initialize() -> DynMenu {
     DynMenu {
@@ -24,25 +38,16 @@ pub fn initialize() -> DynMenu {
 }
 
 // Registers a new menu option
-pub fn add_menu(&_menu: Menu) {
-
-}
+pub fn add_menu(_menu: &Menu) {}
 
 // Represents a menu option
 pub struct Menu {
-    id: u32,
-    name: String,
-    exec_menus: HashMap<SubMenu>,
-}
-
-// Represents an executable menu option
-pub struct SubMenu {
-    id: u32,
-    name: String,
-    function: ExecutableMenu,
+    pub id: u32,
+    pub name: String,
+    pub exec_menus: HashMap<String, Box<dyn ExecutableMenu>>,
 }
 
 // Defines a trait for executing a function within a menu option
 pub trait ExecutableMenu {
-    pub fn execute(_type: MenuOption, args: Vec<String>) -> Result;
+    fn execute(&self, _type: MenuOption, args: Vec<String>);
 }

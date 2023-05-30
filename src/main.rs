@@ -1,5 +1,5 @@
-use dynmenu::DynMenu;
-use std::{process, str::Bytes};
+use dynmenu::*;
+use std::{collections::HashMap, error::Error, process, str::Bytes};
 use tinyexchange::Command;
 mod dynmenu;
 
@@ -15,7 +15,7 @@ fn main() {
     });
 
     // Initialize the Menu component
-    let menu_component: DynMenu = initialize_menus();
+    let menu_component: DynMenu = dynmenu::initialize();
 
     // Calls the config run()
     if let Err(e) = tinyexchange::run(command) {
@@ -25,10 +25,20 @@ fn main() {
 }
 
 // Initialize menus
-fn initialize_menus() -> DynMenu {
-    // Instantiate a Dynamic Menu component
-    let menuComponent = dynmenu::initialize();
-
+fn populate_menus(_dynMenu: &DynMenu) {
     // Initializes Account Menus
-    //menuComponent.
+    //_dynMenu.menu_list.insert(index, element);
+}
+
+// Build Account-related Menu items
+fn build_account_menu() -> Menu {
+    // Start with Account submenus (ExecutableMenu trait)
+    
+
+    // Return a new Menu struct
+    return Menu {
+        id: 1,
+        name: String::from("New"),
+        exec_menus: HashMap::new(),
+    };
 }
