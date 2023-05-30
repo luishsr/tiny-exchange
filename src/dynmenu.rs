@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, error::Error};
 
 /*
  * @dev The dynmenu provides a dynamic list of
@@ -16,17 +16,18 @@ pub struct DynMenu {
 }
 
 // Menu Enum
-enum MenuOption {
-    ACC_CREATE,
-    ACC_BALANCE,
-    ACC_DEPOSIT,
-    ACC_WITHDRAW,
-    MKT_ASSETS,
-    TRD_BUY,
-    TRD_SELL,
-    TRADE,
-    MARKET,
-    ACCOUNT,
+#[derive(Eq, Hash, PartialEq)]
+pub enum MenuOption {
+    AccCreate,
+    AccBalance,
+    AccDeposit,
+    AccWithdraw,
+    MktAssets,
+    TradeBuy,
+    TradeSell,
+    Trade,
+    Market,
+    Account,
 }
 
 // Implements the DynMenu component
@@ -42,12 +43,11 @@ pub fn add_menu(_menu: &Menu) {}
 
 // Represents a menu option
 pub struct Menu {
-    pub id: u32,
-    pub name: String,
-    pub exec_menus: HashMap<String, Box<dyn ExecutableMenu>>,
+    pub id: MenuOption,
+    pub exec_menus: HashMap<MenuOption, Box<dyn ExecutableMenu>>,
 }
 
 // Defines a trait for executing a function within a menu option
 pub trait ExecutableMenu {
-    fn execute(&self, _type: MenuOption, args: Vec<String>);
+    fn execute(&self, _type: MenuOption, args: Vec<String>) -> Result<(), Box<(dyn Error)>>;
 }

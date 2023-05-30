@@ -1,6 +1,8 @@
+use accountcmd::AccountCmd;
 use dynmenu::*;
-use std::{collections::HashMap, error::Error, process, str::Bytes};
+use std::{collections::HashMap, process};
 use tinyexchange::Command;
+mod accountcmd;
 mod dynmenu;
 
 // The entry point of a CLI-based exchange
@@ -15,7 +17,10 @@ fn main() {
     });
 
     // Initialize the Menu component
-    let menu_component: DynMenu = dynmenu::initialize();
+    let mut menu_component: DynMenu = dynmenu::initialize();
+
+    // Populate account, trade, and mkt menus
+    populate_menus(&mut menu_component);
 
     // Calls the config run()
     if let Err(e) = tinyexchange::run(command) {
@@ -25,20 +30,73 @@ fn main() {
 }
 
 // Initialize menus
-fn populate_menus(_dynMenu: &DynMenu) {
-    // Initializes Account Menus
-    //_dynMenu.menu_list.insert(index, element);
+fn populate_menus(_dynMenu: &mut DynMenu) {
+    // Populate Account Menus
+    _dynMenu.menu_list.insert(1, build_account_menu());
+
+    // Populate Market Menus
+    _dynMenu.menu_list.insert(2, build_market_menu());
+
+    // Populate Market Menus
+    _dynMenu.menu_list.insert(3, build_trade_menu());
 }
 
 // Build Account-related Menu items
 fn build_account_menu() -> Menu {
-    // Start with Account submenus (ExecutableMenu trait)
-    
+    // The list of submenus (ExecutableMenu) under the Account Menu
+    let mut exec_menus: HashMap<MenuOption, Box<dyn ExecutableMenu>> = HashMap::new();
 
-    // Return a new Menu struct
+    // The root Account menu
+    let account_cmd = AccountCmd {
+        id: MenuOption::Account,
+    };
+
+    // Add the ExecutableMenu to the list
+    exec_menus.insert(MenuOption::Account, Box::new(account_cmd));
+
+    // Return the Menu struct
     return Menu {
-        id: 1,
-        name: String::from("New"),
-        exec_menus: HashMap::new(),
+        id: MenuOption::Account,
+        exec_menus: exec_menus,
+    };
+}
+
+// Build Market-related Menu items
+fn build_market_menu() -> Menu {
+    // The list of submenus (ExecutableMenu) under the Account Menu
+    let mut exec_menus: HashMap<MenuOption, Box<dyn ExecutableMenu>> = HashMap::new();
+
+    // The root Account menu
+    let market_cmd = AccountCmd {
+        id: MenuOption::Market,
+    };
+
+    // Add the ExecutableMenu to the list
+    exec_menus.insert(MenuOption::Market, Box::new(market_cmd));
+
+    // Return the Menu struct
+    return Menu {
+        id: MenuOption::Market,
+        exec_menus: exec_menus,
+    };
+}
+
+// Build Trade-related Menu items
+fn build_trade_menu() -> Menu {
+    // The list of submenus (ExecutableMenu) under the Account Menu
+    let mut exec_menus: HashMap<MenuOption, Box<dyn ExecutableMenu>> = HashMap::new();
+
+    // The root Account menu
+    let trade_cmd = AccountCmd {
+        id: MenuOption::Trade,
+    };
+
+    // Add the ExecutableMenu to the list
+    exec_menus.insert(MenuOption::Trade, Box::new(trade_cmd));
+
+    // Return the Menu struct
+    return Menu {
+        id: MenuOption::Trade,
+        exec_menus: exec_menus,
     };
 }
