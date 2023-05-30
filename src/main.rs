@@ -1,9 +1,18 @@
 use accountcmd::AccountCmd;
-use dynmenu::*;
+use dynmenucomp::DynMenuStruct;
+use dynmenucomp::ExecutableMenu;
+use dynmenucomp::Menu;
+use dynmenucomp::MenuOption;
+use std::error::Error;
 use std::{collections::HashMap, process};
 use tinyexchange::Command;
 mod accountcmd;
-mod dynmenu;
+mod dynmenucomp;
+
+// Menu options constants
+static ACCOUNT: &str = "account";
+static TRADE: &str = "trade";
+static MARKET: &str = "market";
 
 // The entry point of a CLI-based exchange
 fn main() {
@@ -17,20 +26,20 @@ fn main() {
     });
 
     // Initialize the Menu component
-    let mut menu_component: DynMenu = dynmenu::initialize();
+    let mut menu_component = dynmenucomp::initialize();
 
     // Populate account, trade, and mkt menus
     populate_menus(&mut menu_component);
 
     // Calls the config run()
-    if let Err(e) = tinyexchange::run(&command, &menu_component) {
+    if let Err(e) = run(command, menu_component) {
         println!("Application error: {e}");
         process::exit(1);
     }
 }
 
 // Initialize menus
-fn populate_menus(_dynMenu: &mut DynMenu) {
+fn populate_menus(_dynMenu: &mut DynMenuStruct) {
     // Populate Account Menus
     _dynMenu
         .menu_list
@@ -105,4 +114,48 @@ fn build_trade_menu() -> Menu {
         id: MenuOption::Trade,
         exec_menus: exec_menus,
     };
+}
+
+/* Parse domains and commands
+ * @domains: account, trade, market
+ * @commands: account - deposit, withdraw, balance
+ *            market - assets
+ *            trade - buy, sell, portfolio
+ */
+pub fn run(_command: Command, _dynMenu: dynmenucomp::DynMenuStruct) -> Result<(), Box<dyn Error>> {
+    // Prints the command and key
+    //println!("Domain: {0} - Key: {1}", command.domain, command.key);
+
+    // Find the menu level entry
+    let key = str_to_enum(_command.domain);
+    let menu = _dynMenu.menu_list.get(&key).unwrap();
+
+    // Unwrap the Menu inside the Option<> provided by Rust
+    // and access the hashmap of submenus
+    let domain = str_to_enum(_command.key);
+
+    // TO-DO: implement iterator
+    // Executes the menu option handler
+    menu.exec_menus
+        .get(&domain)
+        .unwrap()
+        .execute(domain, Vec::new());
+
+    Ok(())
+}
+
+// Parse a string argument into an Enum variant
+pub fn str_to_enum(_input: String) -> MenuOption {
+    let mut option: MenuOption = MenuOption::Account;
+
+    // Compare pre-defined options against the user input
+    if _input == ACCOUNT {
+        option = MenuOption::Account
+    } else if (_input == MARKET) {
+        option = MenuOption::Market
+    } else if (_input == TRADE) {
+        option = MenuOption::Trade
+    }
+
+    return option;
 }
