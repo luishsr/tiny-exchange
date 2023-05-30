@@ -23,7 +23,7 @@ fn main() {
     populate_menus(&mut menu_component);
 
     // Calls the config run()
-    if let Err(e) = tinyexchange::run(command) {
+    if let Err(e) = tinyexchange::run(&command, &menu_component) {
         println!("Application error: {e}");
         process::exit(1);
     }
@@ -32,13 +32,19 @@ fn main() {
 // Initialize menus
 fn populate_menus(_dynMenu: &mut DynMenu) {
     // Populate Account Menus
-    _dynMenu.menu_list.insert(1, build_account_menu());
+    _dynMenu
+        .menu_list
+        .insert(MenuOption::Account, build_account_menu());
 
     // Populate Market Menus
-    _dynMenu.menu_list.insert(2, build_market_menu());
+    _dynMenu
+        .menu_list
+        .insert(MenuOption::Market, build_market_menu());
 
     // Populate Market Menus
-    _dynMenu.menu_list.insert(3, build_trade_menu());
+    _dynMenu
+        .menu_list
+        .insert(MenuOption::Trade, build_trade_menu());
 }
 
 // Build Account-related Menu items

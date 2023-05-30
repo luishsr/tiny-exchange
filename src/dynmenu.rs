@@ -11,7 +11,7 @@ use std::{collections::HashMap, error::Error};
 
 // Holds a list of Menu objects at a component level
 pub struct DynMenu {
-    pub menu_list: Vec<Menu>,
+    pub menu_list: HashMap<MenuOption, Menu>,
     pub id_counter: u32,
 }
 
@@ -33,7 +33,7 @@ pub enum MenuOption {
 // Implements the DynMenu component
 pub fn initialize() -> DynMenu {
     DynMenu {
-        menu_list: Vec::new(),
+        menu_list: HashMap::new(),
         id_counter: 0,
     }
 }
