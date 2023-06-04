@@ -1,4 +1,5 @@
 use accountcmd::AccountCmd;
+use marketcmd::MarketCmd;
 use dynmenucomp::DynMenuStruct;
 use dynmenucomp::ExecutableMenu;
 use dynmenucomp::Menu;
@@ -8,6 +9,7 @@ use std::{collections::HashMap, process};
 use tinyexchange::Command;
 mod accountcmd;
 mod dynmenucomp;
+mod marketcmd;
 
 // Menu options constants
 static ACCOUNT: &str = "account";
@@ -82,7 +84,7 @@ fn build_market_menu() -> Menu {
     let mut exec_menus: HashMap<MenuOption, Box<dyn ExecutableMenu>> = HashMap::new();
 
     // The root Account menu
-    let market_cmd = AccountCmd {
+    let market_cmd = MarketCmd{
         id: MenuOption::Market,
     };
 
